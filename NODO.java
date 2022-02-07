@@ -105,7 +105,7 @@ class Arbol {
 		  Ab1.insertar(12);
 		  Ab1.insertar(5);
 		  Ab1.insertar(9);
-		  System.out.println(Ab1.existe(12)); // true
+		  System.out.println(Ab1.existe(12)); 
 	        System.out.println(Ab1.existe(7)); 
 	        System.out.println(Ab1.existe(9)); 
 	        System.out.print("Los datos del arbol son \n");
