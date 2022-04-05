@@ -1,0 +1,41 @@
+#Sistema de Logica Difusa Que Simula LA PROPIPA DE UN VIAJE DE UBER
+import numpy as np
+import skfuzzy as fuzz
+from skfuzzy import control as ctrl
+
+Distancia = ctrl.Antecedent(np.arange(0, 11, 1), 'Distancia')
+Tarifa = ctrl.Antecedent(np.arange(0, 11, 1), 'Tarifa')
+Propina = ctrl.Consequent(np.arange(5, 26, 1), 'Propina')
+              #RESTRICCIONES
+              #TARIFAS
+Tarifa['NORMAL']= fuzz.gaussmf(Tarifa.universe, 0, 1.5)
+Tarifa['Dinamica']= fuzz.gaussmf(Tarifa.universe, 5,1.15)
+#NOS REFERIMOS EN EXTRAÑA EN CASOS DE LLUVIA ,SISMOS ECT.
+Tarifa['EXTRAÑA']=fuzz.trapmf(Tarifa.universe, [5, 7, 9, 10])
+              #DISTANCIAS
+Distancia['Corta'] = fuzz.trapmf(Distancia.universe, [0, 1, 3, 5])
+Distancia['Normal'] = fuzz.trapmf(Distancia.universe, [2, 4,  6, 8])
+Distancia['Larga'] = fuzz.trapmf(Distancia.universe, [5, 7, 9, 10])
+              #PROPINAS
+Propina['Tacaña'] = fuzz.trimf(Propina.universe, [0, 5, 10])
+Propina['Promedio'] = fuzz.trimf(Propina.universe, [5, 15, 25])
+Propina['Generosa'] = fuzz.trimf(Propina.universe, [20, 25, 30])
+
+Tarifa.view()
+Distancia.view()
+Propina.view()
+              #REGLAS
+Regla1= ctrl.Rule(Tarifa['NORMAL']|Distancia['Corta'],Propina['Tacaña'])
+Regla2= ctrl.Rule(Tarifa['NORMAL']| Distancia['Normal'], Propina['Promedio'])
+Regla3=ctrl.Rule(Tarifa['Dinamica']|Distancia['Normal'], Propina['Promedio'])
+Regla4= ctrl.Rule(Tarifa['Dinamica']|Distancia['Larga'], Propina['Generosa'])
+
+
+tipping_ctrl = ctrl.ControlSystem([Regla1, Regla2, Regla3,Regla4])
+tipping = ctrl.ControlSystemSimulation(tipping_ctrl)    
+tipping.input['Tarifa'] = 4
+tipping.input['Distancia'] = 10
+Regla1.view()
+tipping.compute()
+print(tipping.output['Propina'])
+Propina.view(sim=tipping)
