@@ -39,3 +39,4 @@ Regla1.view()
 tipping.compute()
 print(tipping.output['Propina'])
 Propina.view(sim=tipping)
+##
