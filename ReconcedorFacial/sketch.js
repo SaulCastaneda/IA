@@ -1,6 +1,6 @@
+            // RECONOCEDOR FACIAL DE SPIDERMAN
 // Data Set
-let DataSet='https://teachablemachine.withgoogle.com/models/tl-xiUuLF/';
-
+let DataSet='https://teachablemachine.withgoogle.com/models/Sc-IMSrdW/';
 let Classficador;
 let video;
 let flipped; 
@@ -8,7 +8,7 @@ let label="";
 let texto="";
 function preload()
 {
-    classifier = ml5.imageClassifier(DataSet+ 'model.json');
+  classifier = ml5.imageClassifier(DataSet+ 'model.json');
 }
 function setup()
 {
@@ -19,13 +19,12 @@ function setup()
 
     flipped= ml5.flipImage(video);
     classifyVideo();
-
 }
-
 function draw() {
     background(0);
-    // Draw the video
+    // Imprimir Video
     image(flipped, 0, 0);
+    // Validaciones del de data set
   
     if (label === "Andrew Garfield") {
       texto = " \n 🕷🕸⚡ \n Andrew "
@@ -34,33 +33,33 @@ function draw() {
       texto = "\n 🕷🕸⚡ \n Tom "
     } else if (label === "Tobey Maguire") {
       texto = "\n 🕷🕸⚡ \n Tobey"
+    }else if(label === "Alfred Molina"){
+      texto = "\n 🕷🕸⚡ \n Alfred Molina"
     }
-
-    // Draw the label
+    else if(label === "Willem Defoe"){
+      "\n 🕷🕸⚡ \n Willem Defoe"
+    }
+    // Marcos de Reconocerdor
     fill(255);
     textSize(32);
     textAlign(CENTER);
     text(texto, width / 2, height/2);
   }
-  
-  // Get a prediction for the current video frame
+  // MEtodo de Clasificar datos del data set
   function classifyVideo() {
     flipped = ml5.flipImage(video)
     classifier.classify(flipped, gotResult);
     flipped.remove();
-  
   }
-  
-  // When we get a result
+  // Imprimir resultados
   function gotResult(error, results) {
-    // If there is an error
+    // Validacion de Error imprimir el error
     if (error) {
       console.error(error);
       return;
     }
-    // The results are in an array ordered by confidence.
-    // console.log(results[0]);
+    // Array de resutlatados
     label = results[0].label;
-    // Classifiy again!
+    // funcion de Clasifiacion JS
     classifyVideo();
   }
